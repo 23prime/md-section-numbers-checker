@@ -18,6 +18,16 @@ go install github.com/23prime/md-section-numbers-checker@latest
 md-section-numbers-checker <file.md>
 ```
 
+## Error Codes
+
+| Code | Description |
+| ------ | ------------- |
+| `TRAILING_DOT` | Section number requires trailing dot (e.g., `1.` not `1`) |
+| `SPACING` | Exactly one space required after number |
+| `DEPTH_MISMATCH` | Heading level doesn't match number depth |
+| `MISSING_PARENT` | Parent section not defined before child |
+| `ORDER` | Section numbers not in ascending order |
+
 ## Development
 
 ### Setup
@@ -30,9 +40,23 @@ mise trust -q && mise install
 
 ### Run
 
-```bash
-go run ./cmd/md-section-numbers-checker
-```
+- Show version
+
+    ```bash
+    go run ./cmd/md-section-numbers-checker --version
+    ```
+
+- Run for valid example
+
+    ```bash
+    go run ./cmd/md-section-numbers-checker examples/valid.md
+    ```
+
+- Run for invalid example
+
+    ```bash
+    go run ./cmd/md-section-numbers-checker examples/invalid.md
+    ```
 
 ### Build
 

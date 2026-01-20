@@ -10,7 +10,7 @@ A CLI tool to check the consistency of section numbers in Markdown files.
 
 ```bash
 # Run
-go run ./cmd/md-section-numbers-checker
+go run ./cmd/md-section-numbers-checker examples/valid.md
 
 # Build
 go build -o bin/md-section-numbers-checker ./cmd/md-section-numbers-checker
@@ -28,6 +28,18 @@ golangci-lint run
 ## Architecture
 
 - `cmd/md-section-numbers-checker/` - CLI entry point
-- `internal/` - Internal packages (not importable by external code)
+- `internal/checker/` - Core validation logic
+  - `checker.go` - Validation functions and error types
+  - `extractor.go` - Markdown heading parser
+- `docs/spec.md` - Specification document
+- `examples/` - Example Markdown files for testing
 
 Version information is embedded at build time via `-ldflags` (see `.github/workflows/release.yml`).
+
+## Error Codes
+
+- `TRAILING_DOT` - Section number requires trailing dot
+- `SPACING` - Exactly one space required after number
+- `DEPTH_MISMATCH` - Heading level doesn't match number depth
+- `MISSING_PARENT` - Parent section not defined before child
+- `ORDER` - Section numbers not in ascending order
