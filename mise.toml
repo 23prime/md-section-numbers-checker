@@ -1,0 +1,7 @@
+[tools]
+# Go
+go = "1.25"
+golangci-lint = "2"
+
+# Git
+lefthook = "latest"

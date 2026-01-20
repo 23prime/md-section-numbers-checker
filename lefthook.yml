@@ -1,0 +1,17 @@
+# See: https://lefthook.dev/configuration/
+
+pre-push:
+  jobs:
+    - name: lint
+      run: golangci-lint run
+
+    - name: test
+      run: go test ./...
+
+pre-commit:
+  jobs:
+    - name: lint
+      run: golangci-lint run
+
+    - name: test
+      run: go test ./...
