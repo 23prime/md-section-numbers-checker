@@ -1,3 +1,6 @@
+# ================================================================
+# Tools
+# ================================================================
 [tools]
 # Go
 go = "1.25"
@@ -5,3 +8,55 @@ golangci-lint = "2.7"
 
 # Git
 lefthook = "latest"
+
+
+# ================================================================
+# Tasks
+# See: https://mise.jdx.dev/tasks/toml-tasks.html
+# ================================================================
+
+# Global
+[tasks.setup]
+description = "Setup tools"
+run = ["mise trust -yq", "mise install"]
+alias = "s"
+
+[tasks.fix]
+description = "Fix all issues"
+depends = ["go-fix"]
+alias = "f"
+
+[tasks.check]
+description = "Check for all issues"
+depends = ["go-check"]
+alias = "c"
+
+[tasks.fix-and-check]
+run = [{ task = "fix" }, { task = "check" }]
+description = "Fix all issues and check for issues"
+alias = "fc"
+
+# Go
+[tasks.go-run]
+description = "Run the md-section-numbers-checker tool"
+run = "go run ./cmd/md-section-numbers-checker"
+
+[tasks.go-build]
+description = "Build the md-section-numbers-checker tool"
+run = "go build -o bin/md-section-numbers-checker ./cmd/md-section-numbers-checker"
+
+[tasks.go-test]
+description = "Run tests for the md-section-numbers-checker tool"
+run = "go test -v ./..."
+
+[tasks.go-fix]
+description = "Run golangci-lint auto-fix (formatting and lint fixes)"
+run = "golangci-lint run --fix"
+
+[tasks.go-lint]
+description = "Run golangci-lint (formatting and lint checks)"
+run = "golangci-lint run"
+
+[tasks.go-check]
+description = "Check all issues"
+run = [{ task = "go-lint" }, { task = "go-test" }]

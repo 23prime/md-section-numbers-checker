@@ -57,37 +57,43 @@ mise trust -q && mise install
 - Show version
 
     ```bash
-    go run ./cmd/md-section-numbers-checker --version
+    mise go-run --version
     ```
 
 - Run for valid example
 
     ```bash
-    go run ./cmd/md-section-numbers-checker examples/valid.md
+    mise go-run examples/valid.md
     ```
 
 - Run for invalid example
 
     ```bash
-    go run ./cmd/md-section-numbers-checker examples/invalid.md
+    mise go-run examples/invalid.md
     ```
 
 ### Build
 
 ```bash
-go build -o bin/md-section-numbers-checker ./cmd/md-section-numbers-checker
+mise go-build
 ```
 
 ### Test
 
 ```bash
-go test -v ./...
+mise go-test
 ```
 
 ### Lint
 
 ```bash
-golangci-lint run
+mise go-lint
+```
+
+With fixing:
+
+```bash
+mise go-fix
 ```
 
 ### Git Hooks
