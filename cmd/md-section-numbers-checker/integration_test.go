@@ -144,3 +144,50 @@ func TestNoFilesMatched(t *testing.T) {
 		t.Errorf("expected 'No files matched' in stderr, got: %s", stderr)
 	}
 }
+
+func TestGitIgnoredFileSkipped(t *testing.T) {
+	if _, err := exec.LookPath("git"); err != nil {
+		t.Skip("git not available")
+	}
+
+	dir, err := os.MkdirTemp("", "gitignore-test-*")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer os.RemoveAll(dir)
+
+	if err := exec.Command("git", "init", dir).Run(); err != nil {
+		t.Fatalf("git init failed: %v", err)
+	}
+
+	mdPath := filepath.Join(dir, "ignored.md")
+	if err := os.WriteFile(mdPath, []byte("# Title\n\n## 1. Section\n"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := os.WriteFile(filepath.Join(dir, ".gitignore"), []byte("ignored.md\n"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	var outBuf, errBuf bytes.Buffer
+	cmd := exec.Command(binPath, mdPath)
+	cmd.Dir = dir
+	cmd.Stdout = &outBuf
+	cmd.Stderr = &errBuf
+	err = cmd.Run()
+	exitCode := 0
+	if err != nil {
+		if exitErr, ok := err.(*exec.ExitError); ok {
+			exitCode = exitErr.ExitCode()
+		} else {
+			t.Fatalf("unexpected error: %v", err)
+		}
+	}
+
+	if exitCode != 0 {
+		t.Errorf("expected exit code 0, got %d\nstderr: %s", exitCode, errBuf.String())
+	}
+	if !strings.Contains(outBuf.String(), "All section numbers are valid.") {
+		t.Errorf("expected success message, got stdout: %q stderr: %q", outBuf.String(), errBuf.String())
+	}
+}

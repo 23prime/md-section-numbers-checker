@@ -1,10 +1,13 @@
 package main
 
 import (
+	"bytes"
 	"flag"
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"strings"
 
 	"github.com/23prime/md-section-numbers-checker/internal/checker"
 )
@@ -97,13 +100,55 @@ func processPatterns(patterns []string) bool {
 			continue
 		}
 
-		for _, file := range files {
+		for _, file := range filterGitIgnored(files) {
 			if processFile(file) {
 				hasError = true
 			}
 		}
 	}
 	return hasError
+}
+
+// filterGitIgnored returns only the files that are NOT git-ignored.
+// If git is unavailable or the directory is not a git repo, returns files unchanged.
+func filterGitIgnored(files []string) []string {
+	if len(files) == 0 {
+		return files
+	}
+	if _, err := exec.LookPath("git"); err != nil {
+		return files
+	}
+
+	var input strings.Builder
+	for _, f := range files {
+		input.WriteString(f)
+		input.WriteByte('\n')
+	}
+
+	cmd := exec.Command("git", "check-ignore", "--stdin")
+	cmd.Stdin = strings.NewReader(input.String())
+	var out bytes.Buffer
+	cmd.Stdout = &out
+
+	if err := cmd.Run(); err != nil {
+		// exit 1: no files ignored; exit 128: not a git repo — process all files
+		return files
+	}
+
+	ignored := make(map[string]bool)
+	for _, line := range strings.Split(out.String(), "\n") {
+		if line != "" {
+			ignored[line] = true
+		}
+	}
+
+	result := make([]string, 0, len(files))
+	for _, f := range files {
+		if !ignored[f] {
+			result = append(result, f)
+		}
+	}
+	return result
 }
 
 func processFile(file string) bool {
