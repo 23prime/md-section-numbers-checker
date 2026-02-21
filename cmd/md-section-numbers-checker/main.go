@@ -16,8 +16,16 @@ var (
 )
 
 func main() {
-	showVersion := flag.Bool("version", false, "show version information")
+	showHelp := flag.Bool("help", false, "Show help message")
+	flag.BoolVar(showHelp, "h", false, "Show help message (shorthand)")
+
+	showVersion := flag.Bool("version", false, "Show version information")
 	flag.Parse()
+
+	if *showHelp {
+		showHelpMessage()
+		return
+	}
 
 	if *showVersion {
 		printVersion()
@@ -37,6 +45,25 @@ func main() {
 	}
 
 	fmt.Println("All section numbers are valid.")
+}
+
+func showHelpMessage() {
+	fmt.Printf(`md-section-numbers-checker %s
+
+USAGE:
+  md-section-numbers-checker [OPTIONS] <file.md> ...
+
+OPTIONS:
+  -h, --help     Show this help message
+      --version  Show version information
+
+ERROR CODES:
+  TRAILING_DOT    Section number requires trailing dot (e.g., '1.' not '1')
+  SPACING         Exactly one space required after section number
+  DEPTH_MISMATCH  Heading level doesn't match section number depth
+  MISSING_PARENT  Parent section not defined before child
+  ORDER           Section numbers not in ascending order
+`, Version)
 }
 
 func printVersion() {
