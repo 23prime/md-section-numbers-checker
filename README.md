@@ -26,6 +26,12 @@ VERSION=v1.2.3 INSTALL_DIR=/usr/local/bin sh install.sh
 go install github.com/23prime/md-section-numbers-checker/cmd/mdsnc@latest
 ```
 
+### mise (GitHub backend)
+
+```bash
+mise use github:23prime/md-section-numbers-checker@latest
+```
+
 ## Usage
 
 ```bash
