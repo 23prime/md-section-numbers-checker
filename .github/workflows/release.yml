@@ -70,7 +70,7 @@ jobs:
           GOOS: ${{ matrix.goos }}
           GOARCH: ${{ matrix.goarch }}
         run: |
-          binary_name="md-section-numbers-checker"
+          binary_name="mdsnc"
           if [ "${{ matrix.goos }}" = "windows" ]; then
             binary_name="${binary_name}.exe"
           fi
@@ -84,21 +84,21 @@ jobs:
             -trimpath \
             -ldflags="-s -w -X main.Version=${VERSION} -X main.GitCommit=${COMMIT} -X main.BuildDate=${BUILD_DATE}" \
             -o "${binary_name}" \
-            ./cmd/md-section-numbers-checker
+            ./cmd/mdsnc
 
       - name: Create archive
         run: |
-          archive_name="md-section-numbers-checker-${{ matrix.goos }}-${{ matrix.goarch }}"
+          archive_name="mdsnc-${{ matrix.goos }}-${{ matrix.goarch }}"
           if [ "${{ matrix.goos }}" = "windows" ]; then
-            zip "${archive_name}.zip" md-section-numbers-checker.exe
+            zip "${archive_name}.zip" mdsnc.exe
           else
-            tar -czf "${archive_name}.tar.gz" md-section-numbers-checker
+            tar -czf "${archive_name}.tar.gz" mdsnc
           fi
 
       - name: Upload artifact
         uses: actions/upload-artifact@v6
         with:
-          name: md-section-numbers-checker-${{ matrix.goos }}-${{ matrix.goarch }}
+          name: mdsnc-${{ matrix.goos }}-${{ matrix.goarch }}
           path: |
             *.tar.gz
             *.zip

@@ -67,7 +67,7 @@ func TestVersion(t *testing.T) {
 	if exitCode != 0 {
 		t.Errorf("expected exit code 0, got %d", exitCode)
 	}
-	if !strings.Contains(stdout, "md-section-numbers-checker") {
+	if !strings.Contains(stdout, "mdsnc") {
 		t.Errorf("expected binary name in stdout, got: %s", stdout)
 	}
 }

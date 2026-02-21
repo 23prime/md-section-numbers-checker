@@ -2,7 +2,7 @@
 set -eu
 
 REPO="23prime/md-section-numbers-checker"
-BIN_NAME="md-section-numbers-checker"
+BIN_NAME="mdsnc"
 INSTALL_DIR="${INSTALL_DIR:-${HOME}/.local/bin}"
 
 # ---- detect OS ----
@@ -68,11 +68,11 @@ tar -xzf "${TMP_DIR}/${ARCHIVE}" -C "${TMP_DIR}"
 # ---- install ----
 mkdir -p "${INSTALL_DIR}"
 if [ -w "${INSTALL_DIR}" ]; then
-  mv "${TMP_DIR}/${BIN_NAME}-${GOOS}-${GOARCH}" "${INSTALL_DIR}/${BIN_NAME}"
+  mv "${TMP_DIR}/${BIN_NAME}" "${INSTALL_DIR}/${BIN_NAME}"
   chmod +x "${INSTALL_DIR}/${BIN_NAME}"
 else
   echo "Root privileges required to install to ${INSTALL_DIR}."
-  sudo mv "${TMP_DIR}/${BIN_NAME}-${GOOS}-${GOARCH}" "${INSTALL_DIR}/${BIN_NAME}"
+  sudo mv "${TMP_DIR}/${BIN_NAME}" "${INSTALL_DIR}/${BIN_NAME}"
   sudo chmod +x "${INSTALL_DIR}/${BIN_NAME}"
 fi
 

@@ -46,7 +46,7 @@ func run() int {
 
 	args := flag.Args()
 	if len(args) == 0 {
-		fmt.Fprintln(os.Stderr, "Usage: md-section-numbers-checker <file.md> ...")
+		fmt.Fprintln(os.Stderr, "Usage: mdsnc <file.md> ...")
 		return exitError
 	}
 
@@ -61,10 +61,10 @@ func run() int {
 }
 
 func showHelpMessage() {
-	fmt.Printf(`md-section-numbers-checker %s
+	fmt.Printf(`mdsnc %s
 
 USAGE:
-  md-section-numbers-checker [OPTIONS] <file.md> ...
+  mdsnc [OPTIONS] <file.md> ...
 
 OPTIONS:
   -h, --help     Show this help message
@@ -80,7 +80,7 @@ ERROR CODES:
 }
 
 func printVersion() {
-	fmt.Printf("md-section-numbers-checker %s\n", Version)
+	fmt.Printf("mdsnc %s\n", Version)
 	fmt.Printf("  commit: %s\n", GitCommit)
 	fmt.Printf("  built:  %s\n", BuildDate)
 }

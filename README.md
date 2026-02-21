@@ -23,13 +23,13 @@ VERSION=v1.2.3 INSTALL_DIR=/usr/local/bin sh install.sh
 ### Go install
 
 ```bash
-go install github.com/23prime/md-section-numbers-checker@latest
+go install github.com/23prime/md-section-numbers-checker/cmd/mdsnc@latest
 ```
 
 ## Usage
 
 ```bash
-md-section-numbers-checker <file.md>
+mdsnc <file.md>
 ```
 
 ## Error Codes

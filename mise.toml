@@ -38,15 +38,15 @@ alias = "fc"
 
 # Go
 [tasks.go-run]
-description = "Run the md-section-numbers-checker tool"
-run = "go run ./cmd/md-section-numbers-checker"
+description = "Run the mdsnc tool"
+run = "go run ./cmd/mdsnc"
 
 [tasks.go-build]
-description = "Build the md-section-numbers-checker tool"
-run = "go build -o bin/md-section-numbers-checker ./cmd/md-section-numbers-checker"
+description = "Build the mdsnc tool"
+run = "go build -o bin/mdsnc ./cmd/mdsnc"
 
 [tasks.go-test]
-description = "Run tests for the md-section-numbers-checker tool"
+description = "Run tests for the mdsnc tool"
 run = "go test -v ./..."
 
 [tasks.go-fix]

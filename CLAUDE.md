@@ -10,10 +10,10 @@ A CLI tool to check the consistency of section numbers in Markdown files.
 
 ```bash
 # Run
-go run ./cmd/md-section-numbers-checker examples/valid.md
+go run ./cmd/mdsnc examples/valid.md
 
 # Build
-go build -o bin/md-section-numbers-checker ./cmd/md-section-numbers-checker
+go build -o bin/mdsnc ./cmd/mdsnc
 
 # Test
 go test -v ./...
@@ -27,7 +27,7 @@ golangci-lint run
 
 ## Architecture
 
-- `cmd/md-section-numbers-checker/` - CLI entry point
+- `cmd/mdsnc/` - CLI entry point
 - `internal/checker/` - Core validation logic
   - `checker.go` - Validation functions and error types
   - `extractor.go` - Markdown heading parser
