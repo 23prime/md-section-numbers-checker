@@ -70,9 +70,9 @@ jobs:
           GOOS: ${{ matrix.goos }}
           GOARCH: ${{ matrix.goarch }}
         run: |
-          output_name="md-section-numbers-checker-${{ matrix.goos }}-${{ matrix.goarch }}"
+          binary_name="md-section-numbers-checker"
           if [ "${{ matrix.goos }}" = "windows" ]; then
-            output_name="${output_name}.exe"
+            binary_name="${binary_name}.exe"
           fi
 
           # Extract version information
@@ -83,16 +83,16 @@ jobs:
           go build \
             -trimpath \
             -ldflags="-s -w -X main.Version=${VERSION} -X main.GitCommit=${COMMIT} -X main.BuildDate=${BUILD_DATE}" \
-            -o "${output_name}" \
+            -o "${binary_name}" \
             ./cmd/md-section-numbers-checker
 
       - name: Create archive
         run: |
-          output_name="md-section-numbers-checker-${{ matrix.goos }}-${{ matrix.goarch }}"
+          archive_name="md-section-numbers-checker-${{ matrix.goos }}-${{ matrix.goarch }}"
           if [ "${{ matrix.goos }}" = "windows" ]; then
-            zip "${output_name}.zip" "${output_name}.exe"
+            zip "${archive_name}.zip" md-section-numbers-checker.exe
           else
-            tar -czf "${output_name}.tar.gz" "${output_name}"
+            tar -czf "${archive_name}.tar.gz" md-section-numbers-checker
           fi
 
       - name: Upload artifact
