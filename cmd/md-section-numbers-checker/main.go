@@ -9,6 +9,11 @@ import (
 	"github.com/23prime/md-section-numbers-checker/internal/checker"
 )
 
+const (
+	exitSuccess = 0
+	exitError   = 1
+)
+
 var (
 	Version   = "dev"
 	GitCommit = "unknown"
@@ -16,6 +21,10 @@ var (
 )
 
 func main() {
+	os.Exit(run())
+}
+
+func run() int {
 	showHelp := flag.Bool("help", false, "Show help message")
 	flag.BoolVar(showHelp, "h", false, "Show help message (shorthand)")
 
@@ -24,27 +33,28 @@ func main() {
 
 	if *showHelp {
 		showHelpMessage()
-		return
+		return exitSuccess
 	}
 
 	if *showVersion {
 		printVersion()
-		return
+		return exitSuccess
 	}
 
 	args := flag.Args()
 	if len(args) == 0 {
 		fmt.Fprintln(os.Stderr, "Usage: md-section-numbers-checker <file.md> ...")
-		os.Exit(1)
+		return exitError
 	}
 
 	hasError := processPatterns(args)
 
 	if hasError {
-		os.Exit(1)
+		return exitError
 	}
 
 	fmt.Println("All section numbers are valid.")
+	return exitSuccess
 }
 
 func showHelpMessage() {
