@@ -33,6 +33,10 @@ if [ -z "${VERSION:-}" ]; then
   VERSION="$(curl -fsSL "https://api.github.com/repos/${REPO}/releases/latest" \
     | grep '"tag_name"' \
     | sed 's/.*"tag_name": *"\([^"]*\)".*/\1/')"
+  if [ -z "${VERSION}" ]; then
+    echo "Failed to fetch latest version." >&2
+    exit 1
+  fi
 fi
 
 echo "Installing ${BIN_NAME} ${VERSION} (${GOOS}/${GOARCH})..."
@@ -50,9 +54,9 @@ curl -fsSL "${BASE_URL}/checksums.txt"    -o "${TMP_DIR}/checksums.txt"
 # ---- verify checksum ----
 cd "${TMP_DIR}"
 if command -v sha256sum > /dev/null 2>&1; then
-  grep " ${ARCHIVE}$" checksums.txt | sha256sum -c -
+  grep " ${ARCHIVE}$" checksums.txt | sha256sum -c - || { echo "Checksum mismatch!" >&2; exit 1; }
 elif command -v shasum > /dev/null 2>&1; then
-  grep " ${ARCHIVE}$" checksums.txt | shasum -a 256 -c -
+  grep " ${ARCHIVE}$" checksums.txt | shasum -a 256 -c - || { echo "Checksum mismatch!" >&2; exit 1; }
 else
   echo "Warning: no sha256sum/shasum found, skipping checksum verification." >&2
 fi
@@ -62,6 +66,7 @@ cd - > /dev/null
 tar -xzf "${TMP_DIR}/${ARCHIVE}" -C "${TMP_DIR}"
 
 # ---- install ----
+mkdir -p "${INSTALL_DIR}"
 if [ -w "${INSTALL_DIR}" ]; then
   mv "${TMP_DIR}/${BIN_NAME}-${GOOS}-${GOARCH}" "${INSTALL_DIR}/${BIN_NAME}"
   chmod +x "${INSTALL_DIR}/${BIN_NAME}"
