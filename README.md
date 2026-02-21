@@ -32,6 +32,12 @@ go install github.com/23prime/md-section-numbers-checker/cmd/mdsnc@latest
 mdsnc <file.md>
 ```
 
+Check all `.md` files:
+
+```bash
+mdsnc '**/*.md'
+```
+
 ## Error Codes
 
 | Code | Description |
