@@ -8,6 +8,20 @@ A CLI tool to check the consistency of section numbers in Markdown files.
 
 ## Installation
 
+### Install script (Linux / macOS)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/23prime/md-section-numbers-checker/main/install.sh | sh
+```
+
+Installs to `~/.local/bin` by default. Override with `INSTALL_DIR` or `VERSION`:
+
+```bash
+VERSION=v1.2.3 INSTALL_DIR=/usr/local/bin sh install.sh
+```
+
+### Go install
+
 ```bash
 go install github.com/23prime/md-section-numbers-checker@latest
 ```
