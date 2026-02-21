@@ -216,15 +216,27 @@ func parseLastSegment(heading *Heading, lineNumber int) (int, *Error) {
 }
 
 func checkAscendingOrder(state *validationState, parent parentInfo, currentValue int, lineNumber int) *Error {
-	if previousValue, exists := state.lastCounters[parent.depthKey]; exists && currentValue <= previousValue {
-		scope := "top-level"
-		if len(parent.segments) > 0 {
-			scope = fmt.Sprintf("under parent section %s", parent.key)
+	scope := "at top-level"
+	if len(parent.segments) > 0 {
+		scope = fmt.Sprintf("under parent section %s", parent.key)
+	}
+	previousValue, exists := state.lastCounters[parent.depthKey]
+	if !exists {
+		if currentValue != 1 {
+			e := NewError(
+				lineNumber,
+				CodeOrder,
+				fmt.Sprintf("headings %s must start at 1 (got: %d)", scope, currentValue),
+			)
+			return &e
 		}
+		return nil
+	}
+	if currentValue != previousValue+1 {
 		e := NewError(
 			lineNumber,
 			CodeOrder,
-			fmt.Sprintf("headings %s are not in ascending order (previous: %d, current: %d)", scope, previousValue, currentValue),
+			fmt.Sprintf("headings %s are not consecutive (expected: %d, got: %d)", scope, previousValue+1, currentValue),
 		)
 		return &e
 	}

@@ -58,6 +58,40 @@ func TestValidateContent_NotAscending(t *testing.T) {
 	}
 }
 
+func TestValidateContent_NotStartingAtOne(t *testing.T) {
+	invalidDoc := "# Title\n\n## 2. Second\n"
+	errors := ValidateContent(invalidDoc)
+	if len(errors) != 1 {
+		t.Fatalf("expected 1 error, got %d: %v", len(errors), errors)
+	}
+	if errors[0].Code != CodeOrder {
+		t.Errorf("expected code %q, got %q", CodeOrder, errors[0].Code)
+	}
+	if !strings.Contains(errors[0].Message, "must start at 1") {
+		t.Errorf("expected message to contain 'must start at 1', got %q", errors[0].Message)
+	}
+	if !strings.Contains(errors[0].Message, "got: 2") {
+		t.Errorf("expected message to contain 'got: 2', got %q", errors[0].Message)
+	}
+}
+
+func TestValidateContent_NotConsecutive(t *testing.T) {
+	invalidDoc := "# Title\n\n## 1. First\n\n## 3. Third\n"
+	errors := ValidateContent(invalidDoc)
+	if len(errors) != 1 {
+		t.Fatalf("expected 1 error, got %d: %v", len(errors), errors)
+	}
+	if errors[0].Code != CodeOrder {
+		t.Errorf("expected code %q, got %q", CodeOrder, errors[0].Code)
+	}
+	if !strings.Contains(errors[0].Message, "not consecutive") {
+		t.Errorf("expected message to contain 'not consecutive', got %q", errors[0].Message)
+	}
+	if !strings.Contains(errors[0].Message, "expected: 2, got: 3") {
+		t.Errorf("expected message to contain 'expected: 2, got: 3', got %q", errors[0].Message)
+	}
+}
+
 func TestValidateContent_MissingTrailingDot(t *testing.T) {
 	invalidDoc := "# Title\n\n## 1 Parent\n"
 	errors := ValidateContent(invalidDoc)
