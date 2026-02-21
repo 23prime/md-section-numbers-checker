@@ -102,14 +102,6 @@ With fixing:
 mise go-fix
 ```
 
-### Git Hooks
-
-This project uses [Lefthook](https://github.com/evilmartians/lefthook) to run automated checks on pre-commit and pre-push.
-
-```bash
-lefthook install
-```
-
 ## License
 
 MIT
