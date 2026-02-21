@@ -111,12 +111,14 @@ func TestInvalidFile(t *testing.T) {
 	content := "# Title\n\n" +
 		"## 1 Missing Trailing Dot\n\n" +
 		"## 2.No Space After Dot\n\n" +
+		"### 2.2. Not start at \"1\"\n\n" +
 		"## 3.  Two Spaces After Dot\n\n" +
 		"### 4. Depth Mismatch\n\n" +
 		"### 5.1. Missing Parent\n\n" +
-		"## 6. Valid Section\n\n" +
+		"## 6. Not Consecutive After Gap\n\n" +
 		"### 6.1. First Child\n\n" +
-		"### 6.1. Not Ascending\n"
+		"### 6.1. Not Ascending\n\n" +
+		"## 8. Not Consecutive\n"
 	if _, err := f.WriteString(content); err != nil {
 		t.Fatal(err)
 	}
